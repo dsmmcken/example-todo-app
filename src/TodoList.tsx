@@ -21,7 +21,7 @@ function TodoList() {
   ]);
 
   const create = (newTodo: TodoItem) => {
-    console.log(newTodo);
+    console.log("create: ", newTodo);
     todos.push(newTodo);
   };
 

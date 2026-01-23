@@ -21,7 +21,8 @@ function TodoList() {
   ]);
 
   const create = (newTodo: TodoItem) => {
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    console.log(newTodo);
+    todos.push(newTodo);
   };
 
   const remove = (id: string) => {
@@ -29,11 +30,13 @@ function TodoList() {
   };
 
   const toggleComplete = (id: string) => {
-    setTodos((todos) =>
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
-    );
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, completed: true };
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
   };
 
   return (

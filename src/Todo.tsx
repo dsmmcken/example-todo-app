@@ -11,7 +11,6 @@ interface TodoProps {
 function Todo({ todo, remove, toggleComplete }: TodoProps) {
   const handleDelete = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    remove(todo.id);
   };
 
   return (

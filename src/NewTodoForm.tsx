@@ -16,11 +16,10 @@ function NewTodoForm({ create }: NewTodoFormProps) {
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    if (task.trim() === "") return;
 
     const newTodo: TodoItem = {
       id: uuid(),
-      task: task.trim(),
+      task: task,
       completed: false,
     };
     create(newTodo);

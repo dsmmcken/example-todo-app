@@ -1,0 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  background: #1e1e1e;
+  font-size: 1.1rem;
+  font-family: "Fira Code", "Consolas", "Monaco", "Courier New", monospace;
+  height: 100%;
+  color: #f8f8f2;
+}

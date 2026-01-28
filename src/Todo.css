@@ -1,7 +1,7 @@
 .Todo {
   display: flex;
-  margin: 0 -3rem 4px;
-  padding: 1.1rem 3rem;
+  margin: 0 -1.5rem 2px;
+  padding: 0.6rem 1.5rem;
   justify-content: space-between;
   align-items: center;
   background: #3e3d32;

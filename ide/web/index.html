@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <title>Todo Exercise</title>
+    <link rel="icon" href="vscode/favicon.ico" type="image/x-icon" />
+    <link data-name="vs/workbench/workbench.web.main" rel="stylesheet" href="vscode/out/vs/workbench/workbench.web.main.css" />
+    <style>
+      html, body { margin: 0; height: 100%; background: #1f1f1f; }
+      #loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+        color: #9d9d9d; font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; }
+      /* The preview's group is locked so code never opens in it (see autoLockGroups). Hide the
+         lock button, and the preview's close button so it can't be closed. */
+      .editor-group-container.locked .editor-actions .action-item:has(> .codicon-lock),
+      .editor-group-container.locked .tab .tab-actions { display: none; }
+    </style>
+  </head>
+  <body aria-label="">
+    <div id="loading">Loading editor…</div>
+    <script>
+      (function () {
+        const base = new URL(".", location.href);
+        const vscodeBase = new URL("vscode", base).toString();
+        const extensionUrl = new URL("extension", base);
+
+        /* Workbench configuration, see IWorkbenchConstructionOptions in VS Code. Replaced at build time. */
+        const config = /*CONFIG*/ {};
+
+        window.product = {
+          ...config,
+          productConfiguration: {
+            ...config.productConfiguration,
+            webviewContentExternalBaseUrlTemplate: `${vscodeBase}/out/vs/workbench/contrib/webview/browser/pre/`,
+          },
+          additionalBuiltinExtensions: [
+            { scheme: extensionUrl.protocol.slice(0, -1), authority: extensionUrl.host, path: extensionUrl.pathname },
+          ],
+        };
+
+        function loadScript(src) {
+          return new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = resolve;
+            script.onerror = () => reject(new Error(`Failed to load ${src}`));
+            document.body.appendChild(script);
+          });
+        }
+
+        async function boot() {
+          await loadScript(`${vscodeBase}/out/vs/loader.js`);
+          await loadScript(`${vscodeBase}/out/vs/webPackagePaths.js`);
+          for (const key of Object.keys(self.webPackagePaths)) {
+            self.webPackagePaths[key] = `${vscodeBase}/node_modules/${key}/${self.webPackagePaths[key]}`;
+          }
+          require.config({
+            baseUrl: `${vscodeBase}/out`,
+            recordStats: true,
+            trustedTypesPolicy: window.trustedTypes?.createPolicy("amdLoader", {
+              createScriptURL(value) {
+                if (value.startsWith(location.origin)) return value;
+                throw new Error(`Invalid script url: ${value}`);
+              },
+            }),
+            paths: self.webPackagePaths,
+          });
+          new MutationObserver((_, observer) => {
+            if (document.querySelector(".monaco-workbench")) {
+              document.getElementById("loading")?.remove();
+              observer.disconnect();
+            }
+          }).observe(document.body, { childList: true });
+          await loadScript(`${vscodeBase}/out/vs/workbench/workbench.web.main.nls.js`);
+          await loadScript(`${vscodeBase}/out/vs/workbench/workbench.web.main.js`);
+          await loadScript(`${vscodeBase}/out/vs/code/browser/workbench/workbench.js`);
+        }
+
+        /*
+         * Full TypeScript IntelliSense needs SharedArrayBuffer, which requires the page to be
+         * cross-origin isolated. GitHub Pages can't set the required headers, so sw.js adds them.
+         * The first visit registers the service worker and reloads once.
+         */
+        async function ensureCrossOriginIsolated() {
+          const reloadKey = "todo-ide-coi-reload";
+          if (window.crossOriginIsolated) {
+            sessionStorage.removeItem(reloadKey);
+            return;
+          }
+          if (!window.isSecureContext || !navigator.serviceWorker) return;
+          const reloadOnce = () => {
+            if (sessionStorage.getItem(reloadKey)) return false;
+            sessionStorage.setItem(reloadKey, "1");
+            location.reload();
+            return true;
+          };
+          try {
+            await navigator.serviceWorker.register(new URL("sw.js", base), { scope: base.pathname });
+            if (navigator.serviceWorker.controller) {
+              // Controlled but not isolated (e.g. after a hard refresh, which bypasses service workers)
+              if (reloadOnce()) await new Promise(() => {});
+              return;
+            }
+            await new Promise((resolve) => {
+              navigator.serviceWorker.addEventListener("controllerchange", resolve, { once: true });
+              setTimeout(resolve, 4000);
+            });
+            if (navigator.serviceWorker.controller && reloadOnce()) await new Promise(() => {});
+          } catch (e) {
+            console.warn("Cross-origin isolation unavailable; TypeScript will run in a reduced mode", e);
+          }
+        }
+
+        ensureCrossOriginIsolated()
+          .then(boot)
+          .catch((e) => {
+            document.getElementById("loading").textContent = `Failed to load the editor: ${e.message}`;
+            throw e;
+          });
+      })();
+    </script>
+  </body>
+</html>

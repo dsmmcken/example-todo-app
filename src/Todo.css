@@ -1,9 +1,10 @@
 .Todo {
+  position: relative;
   display: flex;
   margin: 0 -1.5rem 2px;
-  padding: 0.6rem 1.5rem;
+  padding-left: 1.5rem;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   background: #3e3d32;
   transition: background 0.2s ease;
   cursor: pointer;
@@ -15,52 +16,114 @@
 
 .Todo-task {
   position: relative;
-  transition: opacity 0.4s linear;
+  align-self: center;
+  /* Room on the left for the circle */
+  padding: 0.6rem 0.2em 0.6rem 2.4em;
+  transition: color 0.3s linear;
   color: #f8f8f2;
   font-weight: 500;
 }
 
+/* Keeps a line of text so blank or whitespace-only todos are the same height as the others */
+.Todo-task:after {
+  content: "\200b";
+}
+
+/* Dimmed with color rather than opacity so the checkmark stays bright */
 .Todo-task.completed {
-  opacity: 0.5;
   color: #75715e;
 }
 
+/* Strike-through, drawn over the text once the checkmark is done */
 .Todo-task.completed:before {
   content: "";
   position: absolute;
   top: 50%;
-  left: -0.5rem;
-  display: block;
-  width: 0%;
+  left: 2.2em;
+  width: 0;
   height: 2px;
-  background: #f33666;
-  animation: strikeitem 0.5s ease-out 0s forwards;
+  background: #4dccfa;
+  animation: strikeitem 0.2s ease-out 0.15s forwards;
 }
 
 @keyframes strikeitem {
   to {
-    width: calc(100% + 1rem);
+    width: calc(100% - 2.2em);
+  }
+}
+
+/* Circle, which the checkmark is drawn into when the todo is completed. These are on the
+   row, as the task's own pseudo-elements are used for the strike-through. */
+.Todo:before,
+.Todo:has(> .Todo-task.completed):after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 1.5rem;
+  box-sizing: border-box;
+  width: 1.4em;
+  height: 1.4em;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.Todo:before {
+  border: 2px solid #75715e;
+  border-radius: 50%;
+  transition: border-color 0.2s ease;
+}
+
+.Todo:hover:not(:has(> .Todo-task.completed)):before {
+  border-color: #a59f85;
+}
+
+.Todo:has(> .Todo-task.completed):before {
+  border-color: #4dccfa;
+}
+
+/* Checkmark, drawn in from left to right */
+.Todo:has(> .Todo-task.completed):after {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234dccfa' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6.5 12.5l3.5 3.5 7.5-8'/%3E%3C/svg%3E")
+    center / 100% no-repeat;
+  clip-path: inset(0 100% 0 0);
+  animation: drawcheck 0.2s ease-out forwards;
+}
+
+@keyframes drawcheck {
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 
 .Todo-buttons {
+  display: flex;
   flex-shrink: 0;
-  padding-left: 0.7em;
+  margin-left: 0.7em;
+  border-left: 1px solid #272822;
+  background: #49483e;
+  transition: background 0.2s ease;
+}
+
+.Todo:hover .Todo-buttons {
+  background: #57564a;
 }
 
 .Todo-buttons button {
   border: none;
   font-size: 1em;
-  margin: 0.4em;
+  padding: 0 1.2rem;
   background: none;
   -webkit-appearance: none;
   cursor: pointer;
   color: #75715e;
-  transition: color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .Todo-buttons button:hover {
-  color: #f33666;
+  background: #f33666;
+  color: #ffffff;
 }
 
 .Todo-edit-form {

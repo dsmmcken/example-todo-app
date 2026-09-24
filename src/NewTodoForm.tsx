@@ -35,7 +35,7 @@ function NewTodoForm({ create }: NewTodoFormProps) {
         id="task"
         type="text"
         name="task"
-        placeholder="New Todo"
+        placeholder="Enter todo..."
       />
       <button type="submit">Add Todo</button>
     </form>

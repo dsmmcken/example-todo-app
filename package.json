@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "ide:build": "node ide/build.mjs",
+    "ide:serve": "node ide/serve.mjs",
+    "ide:typecheck": "tsc -p ide/tsconfig.json"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -19,11 +22,16 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@types/uuid": "^10.0.0",
+    "@types/vscode": "^1.91.0",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/ui": "^2.1.8",
+    "esbuild": "^0.28.2",
+    "esbuild-wasm": "^0.28.2",
     "jsdom": "^25.0.1",
+    "resolve.exports": "^2.0.3",
     "typescript": "^5.7.3",
     "vite": "^6.0.7",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "vscode-web": "^1.91.1"
   }
 }

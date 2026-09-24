@@ -1,12 +1,10 @@
 .TodoList {
-  margin: 1.5rem auto;
-  padding: 1rem 1.5rem 1.5rem;
-  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0 1.5rem;
   background: #272822;
   color: #f8f8f2;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  border: 1px solid #3e3d32;
-  border-radius: 4px;
 }
 
 .TodoList ul {
@@ -14,11 +12,14 @@
 }
 
 .logo-container {
+  position: sticky;
+  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
+  margin: auto -1.5rem 0;
+  padding: 1rem 1.5rem 1.5rem;
+  background: #272822;
   border-top: 1px solid #3e3d32;
 }
 
@@ -26,9 +27,4 @@
   width: 80px;
   height: 80px;
   opacity: 0.7;
-  transition: opacity 0.3s ease;
-}
-
-.deephaven-logo:hover {
-  opacity: 1;
 }

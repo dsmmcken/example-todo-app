@@ -1,0 +1,189 @@
+{
+  "name": "todo-ide",
+  "displayName": "Todo Exercise",
+  "description": "In-browser workspace, bundler and live preview for the todo app interview exercise.",
+  "publisher": "deephaven",
+  "version": "0.1.0",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.91.0"
+  },
+  "browser": "./dist/extension.js",
+  "activationEvents": [
+    "onFileSystem:todo",
+    "onStartupFinished"
+  ],
+  "enabledApiProposals": [
+    "fileSearchProvider",
+    "textSearchProvider"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "todoIde.showPreview",
+        "title": "Show Preview",
+        "category": "Exercise",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "todoIde.reloadPreview",
+        "title": "Reload Preview",
+        "category": "Exercise",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "todoIde.showConsole",
+        "title": "Show Preview Console",
+        "category": "Exercise",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "todoIde.hideConsole",
+        "title": "Hide Preview Console",
+        "category": "Exercise",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "todoIde.resetExercise",
+        "title": "Reset Exercise (discard all changes)",
+        "category": "Exercise"
+      },
+      {
+        "command": "todoIde.changes.open",
+        "title": "Open Changes",
+        "category": "Exercise",
+        "icon": "$(compare-changes)"
+      },
+      {
+        "command": "todoIde.changes.openFile",
+        "title": "Open File",
+        "category": "Exercise",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "todoIde.changes.revert",
+        "title": "Revert Changes",
+        "category": "Exercise",
+        "icon": "$(discard)"
+      },
+      {
+        "command": "todoIde.changes.revertAll",
+        "title": "Revert All Changes",
+        "category": "Exercise",
+        "icon": "$(discard)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "todoIde.reloadPreview",
+          "when": "activeEditor == 'WebviewEditor'",
+          "group": "navigation@1"
+        },
+        {
+          "command": "todoIde.showConsole",
+          "when": "activeEditor == 'WebviewEditor' && activePanel != 'workbench.panel.output'",
+          "group": "navigation@2"
+        },
+        {
+          "command": "todoIde.hideConsole",
+          "when": "activeEditor == 'WebviewEditor' && activePanel == 'workbench.panel.output'",
+          "group": "navigation@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "todoIde.hideConsole",
+          "when": "activePanel == 'workbench.panel.output'"
+        },
+        {
+          "command": "todoIde.changes.open",
+          "when": "false"
+        },
+        {
+          "command": "todoIde.changes.openFile",
+          "when": "false"
+        },
+        {
+          "command": "todoIde.changes.revert",
+          "when": "false"
+        }
+      ],
+      "scm/title": [
+        {
+          "command": "todoIde.changes.revertAll",
+          "when": "scmProvider == todoIde",
+          "group": "navigation"
+        }
+      ],
+      "scm/resourceGroup/context": [
+        {
+          "command": "todoIde.changes.revertAll",
+          "when": "scmProvider == todoIde",
+          "group": "inline"
+        },
+        {
+          "command": "todoIde.changes.revertAll",
+          "when": "scmProvider == todoIde",
+          "group": "1_modification"
+        }
+      ],
+      "scm/resourceState/context": [
+        {
+          "command": "todoIde.changes.openFile",
+          "when": "scmProvider == todoIde && scmResourceState != deleted",
+          "group": "inline@1"
+        },
+        {
+          "command": "todoIde.changes.revert",
+          "when": "scmProvider == todoIde",
+          "group": "inline@2"
+        },
+        {
+          "command": "todoIde.changes.open",
+          "when": "scmProvider == todoIde && scmResourceState == modified",
+          "group": "navigation@1"
+        },
+        {
+          "command": "todoIde.changes.openFile",
+          "when": "scmProvider == todoIde && scmResourceState != deleted",
+          "group": "navigation@2"
+        },
+        {
+          "command": "todoIde.changes.revert",
+          "when": "scmProvider == todoIde",
+          "group": "1_modification"
+        }
+      ]
+    },
+    "colors": [
+      {
+        "id": "todoIde.modifiedResourceForeground",
+        "description": "Color for files changed from the original exercise.",
+        "defaults": {
+          "dark": "#E2C08D",
+          "light": "#895503",
+          "highContrast": "#E2C08D"
+        }
+      },
+      {
+        "id": "todoIde.addedResourceForeground",
+        "description": "Color for files added to the exercise.",
+        "defaults": {
+          "dark": "#81b88b",
+          "light": "#587c0c",
+          "highContrast": "#a1e3ad"
+        }
+      },
+      {
+        "id": "todoIde.deletedResourceForeground",
+        "description": "Color for files deleted from the exercise.",
+        "defaults": {
+          "dark": "#c74e39",
+          "light": "#ad0707",
+          "highContrast": "#c74e39"
+        }
+      }
+    ]
+  }
+}

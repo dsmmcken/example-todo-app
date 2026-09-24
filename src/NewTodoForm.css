@@ -1,5 +1,5 @@
 .NewTodoForm {
-  margin-top: 1rem;
+  margin: 1rem 0 1.5rem;
   display: flex;
   flex-wrap: wrap;
 }
@@ -13,11 +13,12 @@
 }
 
 .NewTodoForm input {
-  flex-grow: 1;
+  flex: 1 1 0;
+  min-width: 0;
   border: 2px solid #3e3d32;
   background: #1e1e1e;
   color: #f8f8f2;
-  padding: 0 1.5em;
+  padding: 0 0.9em;
   font-size: initial;
   transition: border-color 0.2s ease;
 }
@@ -40,6 +41,8 @@
   text-transform: uppercase;
   font-weight: bold;
   margin-left: 5px;
+  flex-shrink: 0;
+  white-space: nowrap;
   cursor: pointer;
   transition: background 0.2s ease;
 }
